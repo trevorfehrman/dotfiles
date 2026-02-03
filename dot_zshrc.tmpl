@@ -9,12 +9,14 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="$PATH:$HOME/go/bin"
-export PNPM_HOME="/Users/trevorfehrman/Library/pnpm"
+export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
-export PATH="/Users/trevorfehrman/.codeium/windsurf/bin:$PATH"
+{{ if eq .machine_type "personal" -}}
+export PATH="$HOME/.codeium/windsurf/bin:$PATH"
+{{ end -}}
 export PATH="$HOME/.local/bin:$PATH"
 
 # =============================================
@@ -65,24 +67,8 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 bindkey '^ ' autosuggest-accept
 
 # =============================================
-# 8. zsh-vi-mode (with fzf + fzf-tab callback)
-# =============================================
-function zvm_after_init() {
-  eval "$(fzf --zsh)"
-  source /opt/homebrew/opt/fzf-tab/share/fzf-tab/fzf-tab.zsh
-  source ~/fzf-git.sh/fzf-git.sh
-}
-source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-
-# =============================================
-# 9. Aliases
-# =============================================
-alias ls="eza --icons=always"
-alias vim="nvim"
-alias air='$(go env GOPATH)/bin/air'
-
-# =============================================
-# 10. FZF config (env vars, theme, previews)
+# 8. FZF config (env vars, theme, previews)
+#    NOTE: Must be before zsh-vi-mode so zvm_after_init callback sees these
 # =============================================
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -126,9 +112,26 @@ _fzf_comprun() {
 }
 
 # =============================================
+# 9. zsh-vi-mode (with fzf + fzf-tab callback)
+# =============================================
+function zvm_after_init() {
+  eval "$(fzf --zsh)"
+  source /opt/homebrew/opt/fzf-tab/share/fzf-tab/fzf-tab.zsh
+  source ~/fzf-git.sh/fzf-git.sh
+}
+source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+# =============================================
+# 10. Aliases
+# =============================================
+alias ls="eza --icons=always"
+alias vim="nvim"
+alias air='$(go env GOPATH)/bin/air'
+
+# =============================================
 # 11. Tool inits (zoxide, thefuck, yazi)
 # =============================================
-eval "$(zoxide init --cmd cd zsh)"
+[[ -o interactive ]] && eval "$(zoxide init --cmd cd zsh)"
 eval $(thefuck --alias)
 eval $(thefuck --alias fk)
 
@@ -150,6 +153,6 @@ export EDITOR=nvim
 # =============================================
 # 13. Misc sources
 # =============================================
-[ -s "/Users/trevorfehrman/.bun/_bun" ] && source "/Users/trevorfehrman/.bun/_bun"
-. "/Users/trevorfehrman/.deno/env"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+[ -s "$HOME/.deno/env" ] && . "$HOME/.deno/env"
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
