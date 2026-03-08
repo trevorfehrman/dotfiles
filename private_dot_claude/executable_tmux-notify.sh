@@ -21,5 +21,5 @@ fi
 # macOS notification only when Ghostty is not the active app
 frontmost=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null)
 if [ "$frontmost" != "ghostty" ]; then
-  terminal-notifier -title "Terminal" -message "Ready" -group "claude-notify" 2>/dev/null &
+  osascript -e 'display notification "Ready" with title "Claude Code"' 2>/dev/null &
 fi
