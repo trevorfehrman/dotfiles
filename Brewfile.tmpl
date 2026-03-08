@@ -42,7 +42,9 @@ cask "font-hack-nerd-font"
 cask "ngrok"
 {{ end -}}
 cask "font-symbols-only-nerd-font"
+{{ if eq .machine_type "personal" -}}
 cask "git-credential-manager"
+{{ end -}}
 {{ if eq .machine_type "personal" -}}
 vscode "aaron-bond.better-comments"
 vscode "adpyke.codesnap"
