@@ -33,12 +33,12 @@ format = "[$symbol$branch]($style) "
 style = "bold color_green"
 
 [git_status]
-format = "[$all_status$ahead_behind]($style)"
+format = "[$all_status$ahead_behind]($style) "
 style = "bold color_orange"
 
 [cmd_duration]
 min_time = 2_000
-format = "[ $duration]($style)"
+format = "[$duration]($style)"
 style = "color_yellow"
 
 [character]
